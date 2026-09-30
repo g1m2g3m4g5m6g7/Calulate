@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>حاسبتي</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #202124;
+        }
+
+        .calculator {
+            width: 330px;
+            padding: 20px;
+            border-radius: 25px;
+            background: #292a2d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        #display {
+            width: 100%;
+            height: 75px;
+            border: none;
+            outline: none;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 30px;
+            text-align: left;
+            direction: ltr;
+            background: #171717;
+            color: white;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 15px;
+            font-size: 22px;
+            color: white;
+            background: #3a3b3f;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .operator {
+            background: #ff9500;
+        }
+
+        .clear {
+            background: #d9534f;
+        }
+
+        .equal {
+            background: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <div class="title">حاسبتي 🧮</div>
+
+    <input type="text" id="display" value="0" readonly>
+
+    <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button class="operator" onclick="addOperator('%')">%</button>
+        <button class="operator" onclick="addOperator('/')">÷</button>
+
+        <button onclick="addNumber('7')">7</button>
+        <button onclick="addNumber('8')">8</button>
+        <button onclick="addNumber('9')">9</button>
+        <button class="operator" onclick="addOperator('*')">×</button>
+
+        <button onclick="addNumber('4')">4</button>
+        <button onclick="addNumber('5')">5</button>
+        <button onclick="addNumber('6')">6</button>
+        <button class="operator" onclick="addOperator('-')">−</button>
+
+        <button onclick="addNumber('1')">1</button>
+        <button onclick="addNumber('2')">2</button>
+        <button onclick="addNumber('3')">3</button>
+        <button class="operator" onclick="addOperator('+')">+</button>
+
+        <button onclick="addNumber('0')">0</button>
+        <button onclick="addNumber('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+
+</div>
+
+<script>
+    let display = document.getElementById("display");
+
+    function addNumber(number) {
+        if (display.value === "0") {
+            display.value = number;
+        } else {
+            display.value += number;
+        }
+    }
+
+    function addOperator(operator) {
+        let last = display.value.slice(-1);
+
+        if ("+-*/%".includes(last)) {
+            return;
+        }
+
+        display.value += operator;
+    }
+
+    function clearDisplay() {
+        display.value = "0";
+    }
+
+    function deleteLast() {
+        if (display.value.length <= 1) {
+            display.value = "0";
+        } else {
+            display.value = display.value.slice(0, -1);
+        }
+    }
+
+    function calculate() {
+        try {
+            let result = Function(
+                '"use strict"; return (' + display.value + ')'
+            )();
+
+            display.value = result;
+        } catch {
+            display.value = "خطأ";
+        }
+    }
+</script>
+
+</body>
+</html>
